@@ -1,4 +1,3 @@
-import "dotenv/config";
 import mongoose from "mongoose";
 import Appointment from "../models/Appointments.js";
 
