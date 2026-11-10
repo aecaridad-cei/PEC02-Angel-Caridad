@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import Appointments from "../models/Appointments.js";
 import User from "../models/User.js";
+
+dotenv.config();
 
 const estadosValidos = new Set([
     "pendiente",
