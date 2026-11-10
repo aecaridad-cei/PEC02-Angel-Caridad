@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import connectToDatabase from "../lib/mongodb.js";
+import { respuestaError } from "../lib/apiError.js";
 
 const rolesValidos = new Set(["cliente", "barbero", "admin"]);
 
@@ -70,9 +71,7 @@ export default async function handler(req, res) {
             datos: usuarios
         });
     } catch (error) {
-        console.error("Error al consultar usuarios:", error.message);
-        return res.status(500).json({
-            error: "Error al consultar la base de datos"
-        });
+        console.error("Error al consultar usuarios:", error);
+        return respuestaError(res, error);
     }
 }

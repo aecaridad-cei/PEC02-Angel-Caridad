@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Appointments from "../models/Appointments.js";
 import User from "../models/User.js";
 import connectToDatabase from "../lib/mongodb.js";
+import { respuestaError } from "../lib/apiError.js";
 
 const estadosValidos = new Set([
     "pendiente",
@@ -107,9 +108,7 @@ export default async function handler(req, res) {
             datos: citas
         });
     } catch (error) {
-        console.error("Error al consultar citas:", error.message);
-        return res.status(500).json({
-            error: "Error al consultar la base de datos"
-        });
+        console.error("Error al consultar citas:", error);
+        return respuestaError(res, error);
     }
 }
