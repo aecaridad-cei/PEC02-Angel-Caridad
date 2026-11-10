@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Appointments from "../models/Appointments.js";
+import User from "../models/User.js";
 
 const estadosValidos = new Set([
     "pendiente",
@@ -95,8 +96,8 @@ export default async function handler(req, res) {
         const [total, citas] = await Promise.all([
             Appointments.countDocuments(filtro),
             Appointments.find(filtro)
-                .populate("clienteId", "nombre avatar")
-                .populate("barberoId", "nombre avatar especialidad")
+                .populate({ path: "clienteId", select: "nombre avatar", model: User })
+                .populate({ path: "barberoId", select: "nombre avatar especialidad", model: User })
                 .sort({ fecha: 1, horaInicio: 1 })
                 .skip((pagina - 1) * limite)
                 .limit(limite)
