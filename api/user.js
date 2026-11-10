@@ -1,3 +1,4 @@
+import "dotenv/config";
 import mongoose from "mongoose";
 import User from "../models/User.js";
 
@@ -5,10 +6,17 @@ import User from "../models/User.js";
 
 export default async function handler(req, res) {
     try {
+    const mongoUri = process.env.MONGODB_URI;
+    if (!mongoUri || !/^mongodb(?:\+srv)?:\/\//.test(mongoUri)) {
+        throw new Error("Configura MONGODB_URI con una URI válida de MongoDB.");
+    }
+
     // Abre la conexion solo si no existe una activa; evita reconectar en cada peticion
     if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(process.env.MONGODB_URI);
+        await mongoose.connect(mongoUri);
     }
+
+    const users = await User.find();
 
     return res.status(200).json({
         total: users.length,
