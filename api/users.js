@@ -9,11 +9,7 @@ export default async function handler(req, res) {
     if (mongoose.connection.readyState === 0) {
         await mongoose.connect(process.env.MONGODB_URI);
     }
-    // Abre la conexion solo si no existe una activa; evita reconectar en cada peticion
-    if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(mongoUri);
-    }
-
+    
     const users = await User.find();
 
     return res.status(200).json({
