@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import Appointments from "../models/Appointments.js";
 import User from "../models/User.js";
-
-dotenv.config();
+import connectToDatabase from "../lib/mongodb.js";
 
 const estadosValidos = new Set([
     "pendiente",
@@ -88,13 +86,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        if (!process.env.MONGODB_URI) {
-            throw new Error("Falta configurar la variable de entorno MONGODB_URI");
-        }
-
-        if (mongoose.connection.readyState === 0) {
-            await mongoose.connect(process.env.MONGODB_URI);
-        }
+        await connectToDatabase();
 
         const [total, citas] = await Promise.all([
             Appointments.countDocuments(filtro),
